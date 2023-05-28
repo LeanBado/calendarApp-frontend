@@ -7,26 +7,17 @@ import { Navbar } from '../components/Navbar'
 import { getMessages } from '../../helpers/getMessages.js'
 import { CalendarEvent } from '../components/CalendarEvent.jsx'
 import { CalendarModal } from '../components/CalendarModal.jsx'
+import { FabAddNew } from '../components/FabAddNew.jsx'
 import { useUiStore } from '../../hooks/useUiStore.js'
+import { useCalendarStore } from '../../hooks/useCalendarStore.js'
+import { FabDelete } from '../components/FabDelete.jsx'
 
 
 
-
-const event = [{
-  title: 'cumple del jefe',
-  notes: 'Hay que comprar regalo',
-  start: new Date(),
-  end: addHours(new Date(),2),
-  bgColor: '#fafafa',
-  user:{
-    _id: '123',
-    name: 'Leandro'
-  }
-
-}]
 
 export const CalendarPage = () => {
 
+  const {events, setActiveEvent} = useCalendarStore()
   const {openDateModal} = useUiStore()
   const [period, setPeriod] = useState(localStorage.getItem("period") || "week");
 
@@ -46,7 +37,7 @@ export const CalendarPage = () => {
       openDateModal()
     }
     const onSelect = (event) => {
-      console.log(event)
+      setActiveEvent(event)
     }
     const onViewChange = (event) => {
       console.log(event)
@@ -60,7 +51,7 @@ export const CalendarPage = () => {
       <Calendar
       culture='es'
       localizer={localizer}
-      events={event}
+      events={events}
       defaultView={period}
       startAccessor="start"
       endAccessor="end"
@@ -75,6 +66,8 @@ export const CalendarPage = () => {
       onView={onViewChange}
       />
     <CalendarModal></CalendarModal>
+    <FabAddNew></FabAddNew>
+    <FabDelete></FabDelete>
 
     </>
   )

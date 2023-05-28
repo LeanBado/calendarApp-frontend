@@ -1,12 +1,13 @@
 import { addHours, differenceInSeconds } from 'date-fns';
 import es from 'date-fns/locale/es'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Modal from 'react-modal'
 import DatePicker, { registerLocale } from "react-datepicker";
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css'
 import "react-datepicker/dist/react-datepicker.css";
 import { useUiStore } from '../../hooks/useUiStore';
+import { useCalendarStore } from '../../hooks/useCalendarStore';
 registerLocale('es', es)
 
 const customStyles = {
@@ -24,16 +25,22 @@ export const CalendarModal = () => {
 
     const {isDateModalOpen, closeDateModal} = useUiStore()
 
-    //const [isOpen, setisOpen] = useState(true);
+    const {events, activeEvent, startSavingEvent} = useCalendarStore()
     
     const [formSubmitted, setformSubmitted] = useState(false)
 
     const [formValues, setformValues] = useState({
-      title: 'Leandro',
-      notes: 'Contenido de las notas',
+      title: '',
+      notes: '',
       start: new Date(),
       end: addHours(new Date(), 2)
-    });
+    }); 
+
+    useEffect(() => {
+      if(activeEvent !== null){
+        setformValues({...activeEvent})
+      }
+    }, [activeEvent]);
 
       Modal.setAppElement('#root'); //va el id del div del HTML que contiene todo
 
@@ -65,7 +72,7 @@ export const CalendarModal = () => {
         })
       }
 
-      const onSubmit = (event) =>{
+      const onSubmit = async (event) =>{
         event.preventDefault()
         setformSubmitted(true)
 
@@ -74,7 +81,11 @@ export const CalendarModal = () => {
           Swal.fire('error en fechas', 'revisar fechas ingresadas')
           return
         }
+        if (formValues.length <= 0) return
         
+        await startSavingEvent(formValues)
+        closeDateModal()
+        setformSubmitted(false)
       }
 
   return (
