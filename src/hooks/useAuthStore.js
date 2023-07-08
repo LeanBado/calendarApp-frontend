@@ -17,6 +17,7 @@ export const useAuthStore = () => {
             localStorage.setItem('token-init-date', new Date().getTime())
 
             dispatch(onLogin({name: data.usuario, uid: data.id}))
+            
 
            
         } catch (error) {
@@ -34,7 +35,6 @@ export const useAuthStore = () => {
 
         try {
             const {data} = await calendarApi.post('/auth/new',{name, email, password})
-            console.log({data})
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime())
 
@@ -55,11 +55,10 @@ export const useAuthStore = () => {
 
         try {
             const {data} = await calendarApi.get('/auth/renew')
-            console.log({data})
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime())
 
-            dispatch(onLogin({name: data.usuario, uid: data.id}))
+            dispatch(onLogin({name: data.name, uid: data.uid}))
             
 
 

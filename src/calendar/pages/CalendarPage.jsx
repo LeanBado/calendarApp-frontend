@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Calendar } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { addHours } from 'date-fns'
@@ -11,19 +11,24 @@ import { FabAddNew } from '../components/FabAddNew.jsx'
 import { useUiStore } from '../../hooks/useUiStore.js'
 import { useCalendarStore } from '../../hooks/useCalendarStore.js'
 import { FabDelete } from '../components/FabDelete.jsx'
+import { useAuthStore } from '../../hooks/useAuthStore.js'
 
 
 
 
 export const CalendarPage = () => {
 
-  const {events, setActiveEvent} = useCalendarStore()
+  const{user} = useAuthStore()
+  const {events, setActiveEvent, startLoadingEvents} = useCalendarStore()
   const {openDateModal} = useUiStore()
   const [period, setPeriod] = useState(localStorage.getItem("period") || "week");
 
   const eventStyleGetter = (event, start, end, isSelected)=>{
+
+    const validador = (event.user._id === user.uid) || (event.user.uid === user.uid)
+
     const style ={
-      backgroundColor: '#347CF7',
+      backgroundColor: validador ? '#347CF7' : '#465660',
       borderRadius: '0px',
       opacity: 0.8,
       color: 'white'
@@ -43,6 +48,12 @@ export const CalendarPage = () => {
       console.log(event)
      localStorage.setItem("period", event)
     }
+
+
+    useEffect(() => {
+      startLoadingEvents()
+    }, [])//arreglo vacio para que se dispare 1 sola vez
+    
 
   return (
     <>

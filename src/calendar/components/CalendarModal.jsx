@@ -54,12 +54,12 @@ export const CalendarModal = () => {
       }, [formValues.title, formSubmitted])
 
       const onCloseModal = ()=> {
-        console.log("cerrando modal")
+      
         closeDateModal()
       }
 
       const onChangeForm = (event) =>{
-        console.log(event.target)
+        
         setformValues({
           ...formValues,
           [event.target.name]:event.target.value
@@ -81,7 +81,9 @@ export const CalendarModal = () => {
           Swal.fire('error en fechas', 'revisar fechas ingresadas')
           return
         }
-        if (formValues.length <= 0) return
+        if (formValues.title.length <= 0) return
+
+        console.log('form value',formValues)
         
         await startSavingEvent(formValues)
         closeDateModal()
