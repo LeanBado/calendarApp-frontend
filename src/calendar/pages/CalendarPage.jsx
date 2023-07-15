@@ -45,7 +45,6 @@ export const CalendarPage = () => {
       setActiveEvent(event)
     }
     const onViewChange = (event) => {
-      console.log(event)
      localStorage.setItem("period", event)
     }
 

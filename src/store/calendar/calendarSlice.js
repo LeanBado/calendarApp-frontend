@@ -57,11 +57,22 @@ export const calendarSlice = createSlice({
                 }
         //barre el array de events y confirmar por el id del evento si ya existe o no existe, sino existe lo agrega
             }); */
-
+        },
+        onLogOutEventTotal : (state) =>{
+            state.isLoadingEvents = true,
+            state.events = [],
+            state.activeEvent= null
         }
     }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { onSetActiveEvent, onAddNewEvent, onUpdateEvent, onDeleteEvent, onLoadEvent } = calendarSlice.actions;
+export const {
+  onSetActiveEvent,
+  onAddNewEvent,
+  onUpdateEvent,
+  onDeleteEvent,
+  onLoadEvent,
+  onLogOutEventTotal,
+} = calendarSlice.actions;

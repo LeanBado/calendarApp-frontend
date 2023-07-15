@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import calendarApi from "../api/calendarApi"
 import { checking, clearMessage, onLogin, onLogOut } from "../store/auth/authSlice"
+import { onLogOutEventTotal } from "../store/calendar/calendarSlice"
 
 export const useAuthStore = () => {
 
@@ -22,7 +23,6 @@ export const useAuthStore = () => {
            
         } catch (error) {
             dispatch(onLogOut('credenciales incorrectas'))
-            console.log(error)
             setTimeout(() => {
                 dispatch(clearMessage())
             }, 20);
@@ -70,6 +70,7 @@ export const useAuthStore = () => {
 
     const startLogout = ()=>{
         localStorage.clear()
+        dispatch(onLogOutEventTotal())
         dispatch(onLogOut())
     }
 
